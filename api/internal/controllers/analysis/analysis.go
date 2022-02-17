@@ -15,7 +15,10 @@
 package analysis
 
 import (
+	"errors"
 	"time"
+
+	"github.com/ZupIT/horusec-devkit/pkg/services/database/response"
 
 	"github.com/google/uuid"
 
@@ -52,26 +55,34 @@ func NewAnalysisController(broker brokerService.IBroker, appConfig appConfigurat
 }
 
 func (c *Controller) GetAnalysis(analysisID uuid.UUID) (*analysis.Analysis, error) {
-	response := c.repoAnalysis.FindAnalysisByID(analysisID)
-	if response.GetError() != nil {
-		return nil, response.GetError()
+	res := c.repoAnalysis.FindAnalysisByID(analysisID)
+	if res.GetError() != nil {
+		return nil, res.GetError()
 	}
-	if response.GetData() == nil {
+	if res.GetData() == nil {
 		return nil, enums.ErrorNotFoundRecords
 	}
 
-	return response.GetData().(*analysis.Analysis), nil
+	return res.GetData().(*analysis.Analysis), nil
 }
 
+// nolint
 func (c *Controller) SaveAnalysis(analysisEntity *analysis.Analysis) (uuid.UUID, error) {
 	analysisEntity, err := c.createRepositoryIfNotExists(analysisEntity)
 	if err != nil {
 		return uuid.Nil, err
 	}
+
+	//TODO: REMOVE treatCompatibility IN v2.10.0 VERSION
+	if err := c.treatCompatibility(analysisEntity); err != nil {
+		return uuid.Nil, err
+	}
+
 	analysisDecorated, err := c.decorateAnalysisEntityAndSaveOnDatabase(analysisEntity)
 	if err != nil {
 		return uuid.Nil, err
 	}
+
 	if err := c.publishInBroker(analysisDecorated.ID); err != nil {
 		return uuid.Nil, err
 	}
@@ -147,11 +158,90 @@ func (c *Controller) hasDuplicatedHash(
 }
 
 func (c *Controller) publishInBroker(analysisID uuid.UUID) error {
-	response, err := c.GetAnalysis(analysisID)
+	res, err := c.GetAnalysis(analysisID)
 	if err != nil {
 		return err
 	}
 
 	return c.broker.Publish("", exchange.NewAnalysis,
-		exchange.Fanout, response.ToBytes())
+		exchange.Fanout, res.ToBytes())
+}
+
+//TODO:REMOVE ALL BELOW AFTER v2.10.0
+func (c *Controller) treatCompatibility(analysisEntity *analysis.Analysis) error {
+	if !c.existsDepecratedHashesSlice(analysisEntity.AnalysisVulnerabilities) {
+		return nil
+	}
+	hashSlice := make([]string, 0)
+
+	for i := range analysisEntity.AnalysisVulnerabilities {
+		hashSlice = append(hashSlice,
+			analysisEntity.AnalysisVulnerabilities[i].Vulnerability.DeprecatedHashes...)
+	}
+
+	if err := c.saveUpdates(hashSlice, analysisEntity); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Controller) saveUpdates(hashSlice []string, analysisEntity *analysis.Analysis) error {
+	res := c.repoAnalysis.FindVulnerabilitiesByHashSliceInRepository(hashSlice, analysisEntity.RepositoryID)
+	if res.GetError() != nil {
+		return res.GetError()
+	}
+	mapHashToID, err := c.parseResIds(res)
+	if err != nil {
+		return err
+	}
+	query, values := c.mountUpdateQuery(analysisEntity, mapHashToID)
+
+	if err := c.repoAnalysis.RawQuery(query, values); err != nil {
+		return err
+	}
+	return nil
+}
+
+// mountUpdateQuery iterates over rawAnalysis.AnalysisVulnerabilities and
+// checks if some vuln.Vulnerability.DeprecatedHashes is present on
+// mapHashToId then creates and update statement to update the
+// deprecated Hash value to the new one (that is present in rawAnalysis.Vulnerability.VulnHash field)
+func (c *Controller) mountUpdateQuery(rawAnalysis *analysis.Analysis,
+	mapHashToID map[string]uuid.UUID) (string, []string) {
+	query := ""
+	values := make([]string, 0)
+	for i := range rawAnalysis.AnalysisVulnerabilities {
+		for _, hash := range rawAnalysis.AnalysisVulnerabilities[i].Vulnerability.DeprecatedHashes {
+			if mapHashToID[hash] != uuid.Nil {
+				query += "UPDATE vulnerabilities SET vuln_hash =?  where vulnerability_id = ? ;\n"
+				values = append(values, rawAnalysis.AnalysisVulnerabilities[i].Vulnerability.VulnHash, mapHashToID[hash].String())
+			}
+		}
+	}
+	return query, values
+}
+
+// existsDepecratedHashesSlice checks if []analysis.AnalysisVulnerabilities.Vulnerability
+// has a field called DeprecatedHashes
+func (c *Controller) existsDepecratedHashesSlice(slice []analysis.AnalysisVulnerabilities) bool {
+	if len(slice) > 0 {
+		if slice[0].Vulnerability.DeprecatedHashes != nil {
+			return true
+		}
+	}
+	return false
+}
+
+// parseResIds makes a map[hash] id that already exists on database for further manipulation
+func (c *Controller) parseResIds(res response.IResponse) (map[string]uuid.UUID, error) {
+	if res.GetData() == nil {
+		return nil, errors.New("nil response.GetData")
+	}
+	mapIds := res.GetData().(*[]map[string]interface{})
+	mapIDHash := make(map[string]uuid.UUID, len(*mapIds))
+	for _, id := range *mapIds {
+		mapIDHash[id["vuln_hash"].(string)] = uuid.MustParse(id["vulnerability_id"].(string))
+	}
+	return mapIDHash, nil
 }
