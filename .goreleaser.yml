@@ -16,9 +16,20 @@ source:
   enabled: true
 
 release:
-  ids:
-    -
-  draft: true
+  draft: false
+  mode: append
+  footer: |
+    ## Docker images
+    - `docker pull wiliansilvazup/horusec-analytic:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-api:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-auth:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-core:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-manager:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-messages:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-migrations:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-vulnerability:{{ .Tag }}`
+    - `docker pull wiliansilvazup/horusec-webhook:{{ .Tag }}`
+    **Full Changelog**: https://github.com/ZupIT/horusec-platform/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 signs:
   - cmd: cosign
@@ -158,10 +169,10 @@ dockers:
       - horusec-api
       - horusec-api-migrate-v1-v2
     image_templates:
-      - "horuszup/horusec-api:latest"
-      - "horuszup/horusec-api:{{ .Tag }}"
-      - "horuszup/horusec-api:v{{ .Major }}"
-      - "horuszup/horusec-api:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-api:latest"
+      - "wiliansilvazup/horusec-api:{{ .Tag }}"
+      - "wiliansilvazup/horusec-api:v{{ .Major }}"
+      - "wiliansilvazup/horusec-api:v{{ .Major }}.{{ .Minor }}"
     skip_push: auto
 
     dockerfile: ./api/deployments/dockerfiles/Dockerfile.goreleaser
@@ -181,10 +192,10 @@ dockers:
     goos: linux
     goarch: amd64
     image_templates:
-      - "horuszup/horusec-migrations:latest"
-      - "horuszup/horusec-migrations:{{ .Tag }}"
-      - "horuszup/horusec-migrations:v{{ .Major }}"
-      - "horuszup/horusec-migrations:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-migrations:latest"
+      - "wiliansilvazup/horusec-migrations:{{ .Tag }}"
+      - "wiliansilvazup/horusec-migrations:v{{ .Major }}"
+      - "wiliansilvazup/horusec-migrations:v{{ .Major }}.{{ .Minor }}"
     skip_push: auto
     dockerfile: ./migrations/deployments/dockerfiles/Dockerfile.goreleaser
     use: docker
@@ -244,10 +255,10 @@ dockers:
     ids:
       - horusec-core
     image_templates:
-      - "horuszup/horusec-core:latest"
-      - "horuszup/horusec-core:{{ .Tag }}"
-      - "horuszup/horusec-core:v{{ .Major }}"
-      - "horuszup/horusec-core:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-core:latest"
+      - "wiliansilvazup/horusec-core:{{ .Tag }}"
+      - "wiliansilvazup/horusec-core:v{{ .Major }}"
+      - "wiliansilvazup/horusec-core:v{{ .Major }}.{{ .Minor }}"
 
     skip_push: auto
 
@@ -270,10 +281,10 @@ dockers:
     ids:
       - horusec-auth
     image_templates:
-      - "horuszup/horusec-auth:latest"
-      - "horuszup/horusec-auth:{{ .Tag }}"
-      - "horuszup/horusec-auth:v{{ .Major }}"
-      - "horuszup/horusec-auth:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-auth:latest"
+      - "wiliansilvazup/horusec-auth:{{ .Tag }}"
+      - "wiliansilvazup/horusec-auth:v{{ .Major }}"
+      - "wiliansilvazup/horusec-auth:v{{ .Major }}.{{ .Minor }}"
 
     skip_push: auto
 
@@ -297,10 +308,10 @@ dockers:
       - horusec-analytic
       - horusec-analytic-migrate-v1-v2
     image_templates:
-      - "horuszup/horusec-analytic:latest"
-      - "horuszup/horusec-analytic:{{ .Tag }}"
-      - "horuszup/horusec-analytic:v{{ .Major }}"
-      - "horuszup/horusec-analytic:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-analytic:latest"
+      - "wiliansilvazup/horusec-analytic:{{ .Tag }}"
+      - "wiliansilvazup/horusec-analytic:v{{ .Major }}"
+      - "wiliansilvazup/horusec-analytic:v{{ .Major }}.{{ .Minor }}"
 
     skip_push: auto
 
@@ -323,10 +334,10 @@ dockers:
     ids:
       - horusec-messages
     image_templates:
-      - "horuszup/horusec-messages:latest"
-      - "horuszup/horusec-messages:{{ .Tag }}"
-      - "horuszup/horusec-messages:v{{ .Major }}"
-      - "horuszup/horusec-messages:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-messages:latest"
+      - "wiliansilvazup/horusec-messages:{{ .Tag }}"
+      - "wiliansilvazup/horusec-messages:v{{ .Major }}"
+      - "wiliansilvazup/horusec-messages:v{{ .Major }}.{{ .Minor }}"
 
     skip_push: auto
 
@@ -349,10 +360,10 @@ dockers:
     ids:
       - horusec-vulnerability
     image_templates:
-      - "horuszup/horusec-vulnerability:latest"
-      - "horuszup/horusec-vulnerability:{{ .Tag }}"
-      - "horuszup/horusec-vulnerability:v{{ .Major }}"
-      - "horuszup/horusec-vulnerability:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-vulnerability:latest"
+      - "wiliansilvazup/horusec-vulnerability:{{ .Tag }}"
+      - "wiliansilvazup/horusec-vulnerability:v{{ .Major }}"
+      - "wiliansilvazup/horusec-vulnerability:v{{ .Major }}.{{ .Minor }}"
 
     skip_push: auto
 
@@ -375,10 +386,10 @@ dockers:
     ids:
       - horusec-webhook
     image_templates:
-      - "horuszup/horusec-webhook:latest"
-      - "horuszup/horusec-webhook:{{ .Tag }}"
-      - "horuszup/horusec-webhook:v{{ .Major }}"
-      - "horuszup/horusec-webhook:v{{ .Major }}.{{ .Minor }}"
+      - "wiliansilvazup/horusec-webhook:latest"
+      - "wiliansilvazup/horusec-webhook:{{ .Tag }}"
+      - "wiliansilvazup/horusec-webhook:v{{ .Major }}"
+      - "wiliansilvazup/horusec-webhook:v{{ .Major }}.{{ .Minor }}"
     skip_push: auto
 
     dockerfile: ./webhook/deployments/dockerfiles/Dockerfile.goreleaser
@@ -395,8 +406,26 @@ dockers:
       - --tls-verify=false
 
 changelog:
-  sort: asc
+  skip: false
+  use: github
+  groups:
+  - title: 'Features'
+    regexp: "^.*:(feature|feat)\\s-.*$"
+    order: 0
+  - title: 'Bug fixes'
+    regexp: "^.*:(bugfix|fix)\\s-.*$"
+    order: 1
+  - title: 'Hotfixes'
+    regexp: "^.*:hotfix\\s-.*$"
+    order: 2
+  - title: 'Chores'
+    regexp: "^.*:chore\\s-.*$"
+    order: 3
+  - title: Others
+    order: 999
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - '^deps:chore.*$'
+      - '^Commit\sfrom\sGitHub\sActions.*$'
+      - '^build(deps):.*$'
+      - '^Update dependency.*$'
