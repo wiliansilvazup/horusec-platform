@@ -128,7 +128,7 @@ jobs:
           RELEASE_VERSION: ${{ steps.updated-version.outputs.nextBetaVersion }}
         with:
           images: |
-            horuszup/horusec-manager
+            wiliansilvazup/horusec-manager
           tags: |
             type=semver,prefix=v,pattern={{version}},value=${{ env.RELEASE_VERSION }}
             type=semver,prefix=v,pattern={{major}}.{{minor}},value=${{ env.RELEASE_VERSION }}
@@ -146,7 +146,7 @@ jobs:
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-manager:${{ steps.updated-version.outputs.nextBetaVersion }}
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-manager:${{ steps.updated-version.outputs.nextBetaVersion }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 

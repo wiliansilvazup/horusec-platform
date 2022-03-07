@@ -76,14 +76,14 @@ func DockerSignPlatformGoProjects(tag string) error {
 }
 
 const (
-	ImageMessages      = "horuszup/horusec-messages"
-	ImageWebhook       = "horuszup/horusec-webhook"
-	ImageAuth          = "horuszup/horusec-auth"
-	ImageAnalytic      = "horuszup/horusec-analytic"
-	ImageVulnerability = "horuszup/horusec-vulnerability"
-	ImageMigrations    = "horuszup/horusec-migrations"
-	ImageCore          = "horuszup/horusec-core"
-	ImageApi           = "horuszup/horusec-api"
+	ImageMessages      = "wiliansilvazup/horusec-messages"
+	ImageWebhook       = "wiliansilvazup/horusec-webhook"
+	ImageAuth          = "wiliansilvazup/horusec-auth"
+	ImageAnalytic      = "wiliansilvazup/horusec-analytic"
+	ImageVulnerability = "wiliansilvazup/horusec-vulnerability"
+	ImageMigrations    = "wiliansilvazup/horusec-migrations"
+	ImageCore          = "wiliansilvazup/horusec-core"
+	ImageApi           = "wiliansilvazup/horusec-api"
 )
 
 func getImages() []string {
