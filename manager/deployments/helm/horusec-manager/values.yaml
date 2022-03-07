@@ -15,7 +15,7 @@
 replicaCount: 1
 
 image:
-  repository: horuszup/horusec-manager
+  repository: wiliansilvazup/horusec-manager
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: v2.17.4
