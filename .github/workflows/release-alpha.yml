@@ -63,11 +63,11 @@ jobs:
           push: true
           context: ./api
           file: ./api/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-api:alpha
+          tags: wiliansilvazup/horusec-api:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-api:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-api:alpha
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
       - name: Build and push auth
@@ -76,44 +76,44 @@ jobs:
           push: true
           context: ./auth
           file: ./auth/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-auth:alpha
+          tags: wiliansilvazup/horusec-auth:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-auth:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-auth:alpha
       - name: Build and push analytic
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./analytic
           file: ./analytic/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-analytic:alpha
+          tags: wiliansilvazup/horusec-analytic:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-analytic:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-analytic:alpha
       - name: Build and push core
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./core
           file: ./core/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-core:alpha
+          tags: wiliansilvazup/horusec-core:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-core:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-core:alpha
       - name: Build and push manager
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./manager
           file: ./manager/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-manager:alpha
+          tags: wiliansilvazup/horusec-manager:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-manager:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-manager:alpha
 
       - name: Build and push messages
         uses: docker/build-push-action@v2
@@ -121,44 +121,44 @@ jobs:
           push: true
           context: ./messages
           file: ./messages/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-messages:alpha
+          tags: wiliansilvazup/horusec-messages:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-messages:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-messages:alpha
       - name: Build and push migrations
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./migrations
           file: ./migrations/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-migrations:alpha
+          tags: wiliansilvazup/horusec-migrations:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-migrations:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-migrations:alpha
       - name: Build and push vulnerability
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./vulnerability
           file: ./vulnerability/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-vulnerability:alpha
+          tags: wiliansilvazup/horusec-vulnerability:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-vulnerability:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-vulnerability:alpha
       - name: Build and push webhook
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./webhook
           file: ./webhook/deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-webhook:alpha
+          tags: wiliansilvazup/horusec-webhook:alpha
 
       - name: Sign image
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-webhook:alpha
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-webhook:alpha
 
       - name: Delete outdate release
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
@@ -184,12 +184,12 @@ jobs:
 
             ## Docker images
 
-            - `docker pull horuszup/horusec-analytic:alpha`
-            - `docker pull horuszup/horusec-api:alpha`
-            - `docker pull horuszup/horusec-auth:alpha`
-            - `docker pull horuszup/horusec-core:alpha`
-            - `docker pull horuszup/horusec-manager:alpha`
-            - `docker pull horuszup/horusec-messages:alpha`
-            - `docker pull horuszup/horusec-migrations:alpha`
-            - `docker pull horuszup/horusec-vulnerability:alpha`
-            - `docker pull horuszup/horusec-webhook:alpha`
+            - `docker pull wiliansilvazup/horusec-analytic:alpha`
+            - `docker pull wiliansilvazup/horusec-api:alpha`
+            - `docker pull wiliansilvazup/horusec-auth:alpha`
+            - `docker pull wiliansilvazup/horusec-core:alpha`
+            - `docker pull wiliansilvazup/horusec-manager:alpha`
+            - `docker pull wiliansilvazup/horusec-messages:alpha`
+            - `docker pull wiliansilvazup/horusec-migrations:alpha`
+            - `docker pull wiliansilvazup/horusec-vulnerability:alpha`
+            - `docker pull wiliansilvazup/horusec-webhook:alpha`

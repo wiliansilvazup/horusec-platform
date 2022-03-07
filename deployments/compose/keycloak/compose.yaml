@@ -64,7 +64,7 @@ services:
       options:
         max-size: 10m
   horusec-messages:
-    image: horuszup/horusec-messages:latest
+    image: wiliansilvazup/horusec-messages:latest
     depends_on:
       - "rabbit"
     restart: always
@@ -83,7 +83,7 @@ services:
       HORUSEC_SMTP_PORT: "2525"
       HORUSEC_EMAIL_FROM: "horusec@zup.com.br"
   horusec-auth:
-    image: horuszup/horusec-auth:latest
+    image: wiliansilvazup/horusec-auth:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -123,7 +123,7 @@ services:
       HORUSEC_AUTH_URL: "127.0.0.1:8006"
       HORUSEC_MANAGER_URL: "127.0.0.1:8043"
   horusec-core:
-    image: horuszup/horusec-core:latest
+    image: wiliansilvazup/horusec-core:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -143,7 +143,7 @@ services:
       HORUSEC_GRPC_AUTH_URL: "127.0.0.1:8007"
       HORUSEC_MANAGER_URL: "127.0.0.1:8043"
   horusec-analytic:
-    image: horuszup/horusec-analytic:latest
+    image: wiliansilvazup/horusec-analytic:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -161,7 +161,7 @@ services:
       HORUSEC_BROKER_USERNAME: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
       HORUSEC_BROKER_PASSWORD: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
   horusec-api:
-    image: horuszup/horusec-api:latest
+    image: wiliansilvazup/horusec-api:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -179,7 +179,7 @@ services:
       HORUSEC_BROKER_USERNAME: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
       HORUSEC_BROKER_PASSWORD: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
   horusec-vulnerability:
-    image: horuszup/horusec-vulnerability:latest
+    image: wiliansilvazup/horusec-vulnerability:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -196,7 +196,7 @@ services:
       HORUSEC_BROKER_USERNAME: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
       HORUSEC_BROKER_PASSWORD: "guest" # Sensitive information we not recommended usage in production environment, change for usage strong data for connection with this service
   horusec-webhook:
-    image: horuszup/horusec-webhook:latest
+    image: wiliansilvazup/horusec-webhook:latest
     depends_on:
       - "rabbit"
       - "horusec_postgresql"
@@ -213,7 +213,7 @@ services:
      HORUSEC_BROKER_USERNAME: "guest"
      HORUSEC_BROKER_PASSWORD: "guest"
   horusec-manager:
-    image: horuszup/horusec-manager:latest
+    image: wiliansilvazup/horusec-manager:latest
     ports:
       - "8043:8080"
     restart: always

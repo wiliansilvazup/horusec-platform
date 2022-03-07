@@ -100,7 +100,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --rm-dist --skip-publish
+          args: release --rm-dist
         env:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -128,7 +128,7 @@ jobs:
           RELEASE_VERSION: ${{ steps.updated-version.outputs.nextBetaVersion }}
         with:
           images: |
-            horuszup/horusec-manager
+            wiliansilvazup/horusec-manager
           tags: |
             type=semver,prefix=v,pattern={{version}},value=${{ env.RELEASE_VERSION }}
             type=semver,prefix=v,pattern={{major}}.{{minor}},value=${{ env.RELEASE_VERSION }}
@@ -145,8 +145,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Sign image
+        if: ${{ success() }}
         run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-manager:${{ steps.updated-version.outputs.nextBetaVersion }}
+          cosign sign -key $COSIGN_KEY_LOCATION wiliansilvazup/horusec-manager:${{ steps.updated-version.outputs.nextBetaVersion }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 
